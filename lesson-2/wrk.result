@@ -1,0 +1,27 @@
+# WSL2
+plaguedo@DESKTOP-G75EMMG ~/institute/subjects/Программная инженерия/lesson-2
+
+
+# INDEX.HTML
+(venv) > $ wrk -t12 -c400 -d30s http://127.0.0.1:7778/public/
+Running 30s test @ http://127.0.0.1:7778/public/
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   196.40ms  117.08ms   1.99s    86.69%
+    Req/Sec   175.83     61.69   505.00     68.04%
+  62939 requests in 30.05s, 31.57MB read
+  Socket errors: connect 0, read 0, write 0, timeout 11
+Requests/sec:   2094.73
+Transfer/sec:      1.05MB
+
+
+# PROXY TO WSGI
+(venv) > $ wrk -t12 -c400 -d30s http://127.0.0.1:7778/api
+Running 30s test @ http://127.0.0.1:7778/api
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    43.87ms    5.63ms 139.36ms   86.29%
+    Req/Sec   756.05     88.40     1.17k    87.86%
+  271159 requests in 30.06s, 44.98MB read
+Requests/sec:   9021.65
+Transfer/sec:      1.50MB
