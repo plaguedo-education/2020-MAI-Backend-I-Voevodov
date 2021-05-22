@@ -4,13 +4,16 @@ from django.db.models.fields import TextField
 from django.utils import timezone
 import uuid
 
+def get_picture_path(instance, filename):
+    return f"logos/{instance.id}-{instance.name}-{filename}"
+
 # Create your models here.
 class Companie(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=256, verbose_name="Название", blank=False, null=False)
     description = models.TextField(max_length=2048, verbose_name="Описание", blank=True, null=False)
     site = models.CharField(max_length=256, verbose_name="Сайт", blank=True, null=False)
-    # TODO LOGO and to serializer
+    logo = models.ImageField('Логотип', null=True, blank=True, upload_to=get_picture_path)
     
     def __str__(self):
         return f"{self.name}: {self.description[0:128]}"

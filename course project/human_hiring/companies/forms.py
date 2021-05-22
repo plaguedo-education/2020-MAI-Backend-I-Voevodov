@@ -1,7 +1,7 @@
 from django import forms
 from .models import Companie, Vacancy, Responses
 
-class PostForm(forms.ModelForm):
+class CompanyForm(forms.ModelForm):
     class Meta:
-        model = Vacancy
-        fields = ['name', 'description', ]
+        model = Companie
+        fields = ['name', 'description', 'site', 'logo']
