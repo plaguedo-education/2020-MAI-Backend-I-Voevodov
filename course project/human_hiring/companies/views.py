@@ -1,32 +1,17 @@
-from django.http.response import JsonResponse
-from django.shortcuts import render
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
+from .models import Companie, Vacancy, Responses
+from .serializers import CompanyCompactSerializer
+from django.core import serializers
 
 # Create your views here.
-def companies_list(request):
-    if request.method == 'GET':
-        return JsonResponse({
-            'companies': [
-                {
-                  'ID': '00112233-4455-6677-8899-aabbccddeeff',
-                  'name': 'ООО "Сладкий Пирожок"',
-                  'logo': 'http://pic-cream.ru/pie.jpeg',
-                  'number_of_vacancies': 2 
-                },
-                {
-                  'ID': '00112233-4455-6677-8899-aabbccddeeff',
-                  'name': 'ООО "Шоколадный глаз"',
-                  'logo': 'http://pic-cream.ru/eye.png',
-                  'number_of_vacancies': 4 
-                },
-                {
-                  'ID': '00112233-4455-6677-8899-aabbccddeeff',
-                  'name': 'ИП "Биба и Боба"',
-                  'logo': 'http://pic-cream.ru/guys.jpeg',
-                  'number_of_vacancies': 10 
-                },
-            ]
-        })
+class CompaniesView(APIView):
+    def get(self, request):
+        companies = Companie.objects.all()
+        companies_serialized = serializers.serialize('json', companies)
+        return Response({"companies", companies_serialized})
+
 
 def companie_detail(request, pk):
     if request.method == 'GET':

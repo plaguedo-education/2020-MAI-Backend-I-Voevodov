@@ -10,7 +10,7 @@ class Companie(models.Model):
     name = models.CharField(max_length=256, verbose_name="Название", blank=False, null=False)
     description = models.TextField(max_length=2048, verbose_name="Описание", blank=True, null=False)
     site = models.CharField(max_length=256, verbose_name="Сайт", blank=True, null=False)
-    # TODO LOGO
+    # TODO LOGO and to serializer
     
     def __str__(self):
         return f"{self.name}: {self.description[0:128]}"
