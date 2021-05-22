@@ -11,6 +11,14 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import environ
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -128,6 +136,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+
+DEFAULT_FILE_STORAGE='storages.backends.s3boto3.S3Boto3Storage'
+
+AWS_S3_ENDPOINT_URL=env('AWS_S3_ENDPOINT_URL')
+AWS_ACCESS_KEY_ID=env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY=env('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME=env('AWS_STORAGE_BUCKET_NAME')
 
 try:
     from .local_settings import *
