@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Companie, Vacancy, Responses
-from .serializers import CompanyCompactSerializer
+from .serializers import CompanyCompactSerializer, CompanySerializer
 from django.core import serializers
 from .forms import CompanyForm
 
@@ -17,7 +17,7 @@ class CompanyDetailView(APIView):
     def get(self, request, pk):
         company = Companie.objects.get(id=pk)
         # TODO: BIG SEREILIZED
-        company_serialized = CompanyCompactSerializer(company)
+        company_serialized = CompanySerializer(company)
         # company_serialized = serializers.serialize('json', company)
         return Response({"company": company_serialized.data})
 
