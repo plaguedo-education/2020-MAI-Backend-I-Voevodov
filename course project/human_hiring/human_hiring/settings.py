@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
     'rest_framework',
     'companies',
 ]
@@ -59,6 +60,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.mailru.MRGOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+] 
+
 ROOT_URLCONF = 'human_hiring.urls'
 
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
@@ -66,7 +73,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_DIR,],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,6 +81,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
             ],
         },
     },
@@ -139,10 +147,28 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DEFAULT_FILE_STORAGE='storages.backends.s3boto3.S3Boto3Storage'
 
+# S3
 AWS_S3_ENDPOINT_URL=env('AWS_S3_ENDPOINT_URL')
 AWS_ACCESS_KEY_ID=env('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY=env('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME=env('AWS_STORAGE_BUCKET_NAME')
+
+##### AUTH #####
+SOCIAL_AUTH_URL_NAMESPACE='social'
+
+#VK
+SOCIAL_AUTH_VK_OAUTH2_KEY=env('SOCIAL_AUTH_VK_OAUTH2_KEY')
+SOCIAL_AUTH_VK_OAUTH2_SECRET=env('SOCIAL_AUTH_VK_OAUTH2_SECRET')
+SOCIAL_AUTH_VK_OAUTH2_SCOPE=['email']
+# MAIL.RU
+SOCIAL_AUTH_MAILRU_KEY = env('SOCIAL_AUTH_MAILRU_KEY')
+SOCIAL_AUTH_MAILRU_SECRET = env('SOCIAL_AUTH_MAILRU_SECRET')
+
+LOGIN_URL = '/auth/login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_URL = '/auth/logout'
+LOGOUT_REDIRECT_URL = '/'
+
 
 try:
     from .local_settings import *

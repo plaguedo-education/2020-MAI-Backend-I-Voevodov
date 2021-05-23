@@ -1,9 +1,14 @@
 from rest_framework.response import Response
+from django.template.response import TemplateResponse
 from rest_framework.views import APIView
+
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
+# from django.core import serializers
 
 from .models import Companie, Vacancy, Responses
 from .serializers import CompanyCompactSerializer, CompanySerializer
-from django.core import serializers
 from .forms import CompanyForm
 
 # Create your views here.
@@ -12,6 +17,12 @@ class CompaniesView(APIView):
         companies = Companie.objects.all()
         companies_serialized = CompanyCompactSerializer(companies, many=True)
         return Response({"companies": companies_serialized.data})
+
+class CompaniesAllHtmlView(APIView):
+    def get(self, request):
+        companies = Companie.objects.all()
+        companies_serialized = CompanyCompactSerializer(companies, many=True)
+        return TemplateResponse(request, 'companies/list.html', {"companies": companies_serialized.data})
 
 class CompanyDetailView(APIView):
     def get(self, request, pk):
@@ -22,6 +33,12 @@ class CompanyDetailView(APIView):
         return Response({"company": company_serialized.data})
 
 class CompanyNewView(APIView):
+    @method_decorator(login_required)
+    def get(self, request):
+        form = CompanyForm()
+        return TemplateResponse(request, 'companies/new.html', {'form': form})
+    
+    @method_decorator(login_required)
     def post(self, request):
         company_form = CompanyForm(request.POST, request.FILES)
         if company_form.is_valid():
