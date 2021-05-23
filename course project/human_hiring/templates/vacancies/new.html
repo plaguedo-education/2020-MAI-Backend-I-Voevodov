@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form action="/api/companies/new/" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>Name: {{form.name}}
+        <p>Description: {{form.description}}
+        <p>Site: {{form.site}}
+        <p>Logo: {{form.logo}}
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}

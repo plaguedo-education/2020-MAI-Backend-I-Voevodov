@@ -8,7 +8,8 @@ from django.utils.decorators import method_decorator
 # from django.core import serializers
 
 from .models import Companie, Vacancy, Responses
-from .serializers import CompanyCompactSerializer, CompanySerializer
+from .serializers import CompanyCompactSerializer, CompanySerializer, \
+    VacancyCompactSerializer, VacancySerializer
 from .forms import CompanyForm
 
 # Create your views here.
@@ -48,18 +49,22 @@ class CompanyNewView(APIView):
         else:
             return
 
-def companie_detail(request, pk):
-    if request.method == 'GET':
-        return JsonResponse({
-            'ID': pk,
-            'name': 'ООО "Сладкий Пирожок"',
-            'logo': 'http://pic-cream.ru/pie.jpeg',
-            'site': 'www.example.com',
-            'description': '''
-                Самая крутецкая и вкусненькая компания 
-                на всём восточном побережье!
-                Мммм, тут ТАААКИЕЕ вкусные булочки! Ум отъешь!
-                Приходи к нам работать, у нас есть печеньки!
-            ''',
-            'number_of_vacancies': 2,
-        })
+class VacancyDetailView(APIView):
+    def get(self, request, pk):
+        vacancy = Vacancy.objects.get(id=pk)
+        vacancy_serialized = VacancyCompactSerializer(vacancy)
+        return Response({"vacancy": vacancy_serialized.data})
+
+class VacancyAllHtmlView(APIView):
+    def get(self, request):
+        vacancies = Vacancy.objects.all()
+        vacancies_serialized = VacancyCompactSerializer(vacancies, many=True)
+        return TemplateResponse(request, 'vacancies/list.html', {"vacancies": vacancies_serialized.data})
+ 
+class VacancyResponseView(APIView):
+    @method_decorator(login_required)
+    def post(self, request):
+        vacancies = Vacancy.objects.all()
+        vacancies_serialized = VacancyCompactSerializer(vacancies, many=True)
+        return TemplateResponse(request, 'vacancies/list.html', {"vacancies": vacancies_serialized.data})
+

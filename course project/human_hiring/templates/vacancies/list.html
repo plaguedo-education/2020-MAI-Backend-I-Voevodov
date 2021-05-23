@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if request.user.username %}
+        <a href="">
+            <button type="button" class="btn btn-success btn-sm">
+                Add New Vacancy
+            </button>
+        </a>
+    {% endif %}
+    
+    {% for vacancy in vacancies %}
+    <div class="row">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ vacancy.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    Зарплата 
+                    {% if vacancy.wage_from and vacancy.wage_up_to %}
+                        от {{vacancy.wage_from}} и до {{vacancy.wage_up_to}}
+                    {% elif vacancy.wage_from and not vacancy.wage_up_to %}
+                        от {{vacancy.wage_from}}
+                    {% elif not vacancy.wage_from and vacancy.wage_up_to %}
+                        до {{vacancy.wage_up_to}}
+                    {% else %}
+                        не указана
+                    {% endif %}
+                </h6>
+                <p class="card-text">
+
+                </p>
+                <a href="/api/companies/vacancies/{{ vacancy.id }}" class="card-link">Detail</a>
+                <a href="#" class="card-link">Response</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}
