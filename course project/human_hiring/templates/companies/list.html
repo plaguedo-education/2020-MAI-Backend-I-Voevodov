@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if request.user.username %}
+        <a href="{% url 'companie_new' %}">
+            <button type="button" class="btn btn-success btn-sm">
+                Add New Company
+            </button>
+        </a>
+    {% endif %}
+    {% for company in companies %}
+    <div class="row">
+        <div class="card" style="width: 18rem;">
+            <img src="{{ company.logo }}" class="card-img-top" alt="{{company.name}}">
+            <div class="card-body">
+                <h5 class="card-title">{{ company.name }}</h5>
+                <p class="card-text">
+        
+                </p>
+                <a href="/api/companies/{{ company.id }}" class="btn btn-primary">Detailed</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}
